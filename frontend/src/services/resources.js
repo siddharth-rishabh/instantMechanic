@@ -1,0 +1,10 @@
+import api from './api';
+const query = (params) => ({ params });
+export const authApi = { login: (data) => api.post('/auth/login', data), me: () => api.get('/auth/me') };
+export const dashboardApi = { get: () => api.get('/dashboard') };
+export const bookingsApi = { list: (params) => api.get('/bookings', query(params)), get: (id) => api.get(`/bookings/${id}`), create: (data) => api.post('/bookings', data), update: (id, data) => api.patch(`/bookings/${id}`, data), remove: (id) => api.delete(`/bookings/${id}`) };
+export const customersApi = { list: (params) => api.get('/customers', query(params)), get: (id) => api.get(`/customers/${id}`) };
+export const mechanicsApi = { list: (params) => api.get('/mechanics', query(params)), get: (id) => api.get(`/mechanics/${id}`), update: (id, data) => api.patch(`/mechanics/${id}`, data) };
+export const servicesApi = { list: (params) => api.get('/services', query(params)), get: (id) => api.get(`/services/${id}`) };
+export const notificationsApi = { list: (params) => api.get('/notifications', query(params)), read: (id) => api.patch(`/notifications/${id}/read`), readAll: () => api.patch('/notifications/read-all') };
+export const analyticsApi = { get: (params) => api.get('/analytics', query(params)) };
