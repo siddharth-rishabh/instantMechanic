@@ -82,20 +82,56 @@ The seeded accounts use password `InstantMechanic2026!`:
 
 Passwords are stored as bcrypt hashes. Login returns a JWT used for protected REST requests and the Socket.IO handshake.
 
-## API and Socket.IO overview
+## API documentation
 
-Operational endpoints are under `/api` and require JWT authentication, except health and login:
+Operational endpoints are under `/api`. All endpoints require JWT authentication except the health check and login.
 
-- `/health`, `/auth/login`, `/auth/me`, `/dashboard`
-- `/bookings`, `/customers`, `/mechanics`, and `/services`
-- `/notifications` and `/analytics`
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/health` | API and database health |
+| `POST` | `/auth/login` | Authenticate a user |
+| `GET` | `/auth/me` | Restore the authenticated session |
+| `GET` | `/dashboard` | Dashboard KPIs and recent bookings |
+| `GET`, `POST` | `/bookings` | List or create bookings |
+| `GET`, `PATCH`, `DELETE` | `/bookings/:id` | Read, update, or delete a booking |
+| `GET` | `/customers` | Search and list customers |
+| `GET` | `/customers/:id` | Customer details and booking history |
+| `GET` | `/mechanics` | Filter and list mechanics |
+| `GET`, `PATCH` | `/mechanics/:id` | Mechanic details or status update |
+| `GET`, `POST` | `/services` | List or create services |
+| `GET`, `PATCH`, `DELETE` | `/services/:id` | Read, update, or delete a service |
+| `GET` | `/notifications` | List user notifications |
+| `PATCH` | `/notifications/:id/read` | Mark one notification as read |
+| `PATCH` | `/notifications/read-all` | Mark every notification as read |
+| `GET` | `/analytics` | Date-filtered operational analytics |
 
 Socket.IO emits `booking:created`, `booking:updated`, `booking:statusChanged`, and `notification:new`.
 
-## Production notes
+## Production deployment
 
-- Configure production `MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL`, and `VITE_API_URL` values in the hosting platform.
-- Build the frontend with `npm run build` and deploy `frontend/dist/` to a static host.
-- Run the backend with `npm start` on a Node.js host with WebSocket support.
-- Use HTTPS, a strong unique JWT secret, and the exact production frontend origin for `CLIENT_URL`.
-- Never commit `.env` files.
+The intended production architecture is:
+
+```text
+Vercel
+  ↓
+React frontend
+  ↓
+AWS Free Tier / AWS EC2 backend
+  ↓
+MongoDB Atlas
+```
+
+- Deploy the React frontend from `frontend/` to Vercel.
+- Run the Node.js API and Socket.IO server from `backend/` on an AWS Free Tier EC2 instance.
+- Use MongoDB Atlas as the managed production database.
+- Configure production `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `CLIENT_URL`, `PORT`, and `VITE_API_URL` values through the respective hosting platforms.
+- Build the frontend with `npm run build` and configure Vercel to publish `frontend/dist/`.
+- Run the backend with `npm start` behind HTTPS and allow WebSocket connections.
+- Set `CLIENT_URL` to the final Vercel origin and `VITE_API_URL` to the public AWS API URL ending in `/api`.
+- Never commit `.env` files or production secrets.
+
+Production URLs will be documented after deployment.
+
+## AI Usage
+
+AI tools were used to assist with application architecture planning, frontend and backend implementation, database and schema design, API design, debugging, testing and QA, deployment guidance, and documentation. The developer reviewed, tested, modified, and verified the resulting project and remains responsible for the final implementation.
