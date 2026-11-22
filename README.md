@@ -121,6 +121,11 @@ AWS Free Tier / AWS EC2 backend
 MongoDB Atlas
 ```
 
+
+
+
+
+
 - Deploy the React frontend from `frontend/` to Vercel.
 - Run the Node.js API and Socket.IO server from `backend/` on an AWS Free Tier EC2 instance.
 - Use MongoDB Atlas as the managed production database.
@@ -131,6 +136,8 @@ MongoDB Atlas
 - Never commit `.env` files or production secrets.
 
 Production URLs will be documented after deployment.
+
+
 
 ## AI Usage
 
